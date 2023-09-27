@@ -60,7 +60,9 @@ class GameScreen extends StatefulWidget {
 class _GameScreenState extends State<GameScreen> {
   double dotX = 0.0;
   double dotY = 0.0;
-  List<Offset> path = [];
+  List<Offset> ballPath = [];
+  List<Offset> line_path = [];
+  bool draw = false;
   Color selectedColor = Colors.blue;
   @override
   void initState() {
@@ -71,8 +73,11 @@ class _GameScreenState extends State<GameScreen> {
             .x; // Move dot horizontally based on phone's acceleration on the x-axis
         dotY += event
             .y; // Move dot vertically based on phone's acceleration on the y-axis
-        path.add(
-            Offset(-dotX * 4, dotY * 6)); // Add current position to the path
+        ballPath.add(Offset(
+            -dotX * 4, dotY * 6)); // Add current position to the ballPath
+        if (draw) {
+          line_path.add(Offset(-dotX * 4, dotY * 6));
+        }
       });
     });
   }
@@ -81,12 +86,13 @@ class _GameScreenState extends State<GameScreen> {
     setState(() {
       dotX = 0;
       dotY = 0;
-      path.clear(); // Clear the path to remove all lines
+      ballPath.clear(); // Clear the ballPath to remove all lines
     });
   }
 
   void startDraw() {
-    // Your code here
+    draw = true;
+    print(line_path);
   }
 
   void openColorPickerDialog(BuildContext context) {
@@ -153,9 +159,9 @@ class _GameScreenState extends State<GameScreen> {
             ],
           ),
           Expanded(
-            child: path.isNotEmpty
+            child: ballPath.isNotEmpty
                 ? CustomPaint(
-                    painter: BallPainter(path, selectedColor),
+                    painter: BallPainter(ballPath, selectedColor, line_path),
                     //child: Container(),
                   )
                 : Container(),
@@ -166,7 +172,7 @@ class _GameScreenState extends State<GameScreen> {
             children: [
               ElevatedButton(
                 onPressed: () {
-                  //startDraw();
+                  startDraw();
                 },
                 child: const Text('Draw'),
               ),
@@ -195,26 +201,32 @@ class _GameScreenState extends State<GameScreen> {
 }
 
 class BallPainter extends CustomPainter {
-  final List<Offset> path;
+  final List<Offset> ballPath;
+  final List<Offset> linePath;
   final Color color; // Added color property
 
-  BallPainter(this.path, this.color); // Updated constructor
+  BallPainter(this.ballPath, this.color, this.linePath); // Updated constructor
 
   @override
   void paint(Canvas canvas, Size size) {
+    _drawLine(canvas);
+    _drawBall(canvas);
+  }
+
+  void _drawLine(Canvas canvas) {
     final paint = Paint()
       ..color = color // Use the selected color
       ..strokeWidth = 4;
-
-    for (int i = 1; i < path.length; i++) {
-      canvas.drawLine(path[i - 1], path[i], paint);
+    for (int i = 1; i < linePath.length; i++) {
+      canvas.drawLine(linePath[i - 1], linePath[i], paint);
     }
+  }
 
-    // Draw a ball at the last point of the path
+  void _drawBall(Canvas canvas) {
     final ballPaint = Paint()
       ..color = color // Use the selected color
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(path.last, 10, ballPaint);
+    canvas.drawCircle(ballPath.last, 10, ballPaint);
   }
 
   @override
