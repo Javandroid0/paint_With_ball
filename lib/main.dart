@@ -15,6 +15,7 @@ import 'package:flutter/material.dart'
         Expanded,
         MainAxisAlignment,
         MaterialApp,
+        MediaQuery,
         Navigator,
         Offset,
         Paint,
@@ -72,7 +73,12 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     accelerometerEvents.listen((AccelerometerEvent event) {
+      double screenWidth = MediaQuery.of(context).size.width;
+      double screenHeight = MediaQuery.of(context).size.height;
+
       setState(() {
+        //print(screenHeight);
+        //print(event.x);
         dotX += event
             .x; // Move dot horizontally based on phone's acceleration on the x-axis
         dotY += event
@@ -86,6 +92,39 @@ class _GameScreenState extends State<GameScreen> {
     });
   }
 
+/*
+  @override
+  void initState() {
+    super.initState();
+    accelerometerEvents.listen((AccelerometerEvent event) {
+      setState(() {
+        double screenWidth = MediaQuery.of(context).size.width;
+        double screenHeight = MediaQuery.of(context).size.height;
+        dotX += event
+            .x; // Move dot horizontally based on phone's acceleration on the x-axis
+        dotY += event
+            .y; // Move dot vertically based on phone's acceleration on the y-axis
+
+        // Calculate the new position of the ball
+        Offset newPosition = Offset(-dotX * 4, dotY * 6);
+
+        // Check if the new position is within the screen boundaries
+        if (newPosition.dx >= 0 &&
+            newPosition.dx <= screenWidth &&
+            newPosition.dy >= 0 &&
+            newPosition.dy <= screenHeight) {
+          // Add current position to the ballPath
+          ballPath.add(newPosition);
+
+          if (draw) {
+            linePath.add(newPosition);
+          }
+        }
+      });
+    });
+  }
+
+*/
   void clearScreen() {
     setState(() {
       dotX = 0;
@@ -93,6 +132,7 @@ class _GameScreenState extends State<GameScreen> {
       ballPath.clear(); // Clear the ballPath to remove all lines
       paths.clear();
       linePath.clear();
+      colors.clear();
     });
   }
 
