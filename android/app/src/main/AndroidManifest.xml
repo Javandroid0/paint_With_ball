@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <application
-        android:label="paint_with_gyroscope"
+        android:label="Ball Painting"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
