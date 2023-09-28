@@ -99,17 +99,12 @@ class _GameScreenState extends State<GameScreen> {
   void startDraw() {
     draw = true;
     colors.add(selectedColor);
-    //print(selectedColor);
-    //print(linePathColors);
   }
 
   void stopDraw() {
     draw = false;
-    //linePathColors.removeLast();
     paths.add(linePath);
     linePath = [];
-
-    //print(paths);
   }
 
   void openColorPickerDialog(BuildContext context) {
@@ -148,7 +143,7 @@ class _GameScreenState extends State<GameScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Accelerometer Game'),
+        title: const Text('Painting Ball'),
       ),
       body: Column(
         children: [
@@ -229,8 +224,13 @@ class BallPainter extends CustomPainter {
   final Color color; // Added color property
   final List<Color> colors;
 
-  BallPainter(this.ballPath, this.color, this.paths, this.linePath,
-      this.colors); // Updated constructor
+  BallPainter(
+    this.ballPath,
+    this.color,
+    this.paths,
+    this.linePath,
+    this.colors,
+  ); // Updated constructor
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -249,30 +249,6 @@ class BallPainter extends CustomPainter {
       }
     }
   }
-
-  // void _drawPaths(Canvas canvas) {
-  //   final paint = Paint()
-  //     ..color = color // Use the selected color
-  //     ..strokeWidth = 4;
-  //   for (final path in paths) {
-  //     for (int i = 1; i < path.length; i++) {
-  //       canvas.drawLine(path[i - 1], path[i], paint);
-  //     }
-  //   }
-  // }
-
-  // void _drawPaths(Canvas canvas) {
-  //   for (int i = 0; i < paths.length; i++) {
-  //     final paint = Paint()
-  //       ..color = linePathColors[i] // Use the color for the current linePath
-  //       ..strokeWidth = 4;
-
-  //     final path = paths[i];
-  //     for (int j = 1; j < path.length; j++) {
-  //       canvas.drawLine(path[j - 1], path[j], paint);
-  //     }
-  //   }
-  // }
 
   void _drawLine(Canvas canvas) {
     for (int i = 1; i < linePath.length; i++) {
