@@ -15,7 +15,6 @@ import 'package:flutter/material.dart'
         Expanded,
         MainAxisAlignment,
         MaterialApp,
-        MediaQuery,
         Navigator,
         Offset,
         Paint,
@@ -73,9 +72,6 @@ class _GameScreenState extends State<GameScreen> {
   void initState() {
     super.initState();
     accelerometerEvents.listen((AccelerometerEvent event) {
-      double screenWidth = MediaQuery.of(context).size.width;
-      double screenHeight = MediaQuery.of(context).size.height;
-
       setState(() {
         //print(screenHeight);
         //print(event.x);
